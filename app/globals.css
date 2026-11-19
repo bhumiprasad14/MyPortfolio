@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 248, 250, 252;
+  --background-start-rgb: 3, 7, 18;
+  --background-end-rgb: 2, 4, 10;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
+body {
+  font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+  color: rgb(var(--foreground-rgb));
+  background: #030712;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  overflow-x: hidden;
+}
+
+/* Custom Minimalist Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #030712;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a78bfa;
+}
+
+/* Ambient Drift Animations */
+@keyframes geminiFloat1 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(80px, -50px, 0) scale(1.14);
+  }
+
+  100% {
+    transform: translate3d(-60px, 40px, 0) scale(0.94);
+  }
+}
+
+@keyframes geminiFloat2 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(-70px, 70px, 0) scale(1.16);
+  }
+
+  100% {
+    transform: translate3d(50px, -40px, 0) scale(0.92);
+  }
+}
+
+@keyframes geminiFloat3 {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.95);
+  }
+
+  50% {
+    transform: translate3d(40px, 50px, 0) scale(1.18);
+  }
+
+  100% {
+    transform: translate3d(-60px, -30px, 0) scale(1);
+  }
+}
+
+.animate-gemini-drift-1 {
+  animation: geminiFloat1 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.animate-gemini-drift-2 {
+  animation: geminiFloat2 28s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.animate-gemini-drift-3 {
+  animation: geminiFloat3 20s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Utilities */
+.shadow-glass {
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

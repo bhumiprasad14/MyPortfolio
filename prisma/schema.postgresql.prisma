@@ -1,0 +1,192 @@
+// PostgreSQL Prisma Schema for Production Deployment (Supabase, Neon, Railway)
+// Simply replace schema.prisma with this or set datasource db provider to "postgresql".
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AdminUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Profile {
+  id               String       @id @default(uuid())
+  fullName         String
+  title            String
+  tagline          String
+  bio              String       @db.Text
+  avatarUrl        String?
+  resumeUrl        String?
+  location         String
+  yearsExperience  String       @default("1+")
+  currentStatus    String       @default("Open to Opportunities")
+  availableForWork Boolean      @default(true)
+  email            String
+  phone            String?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  socialLinks      SocialLink[]
+}
+
+model Project {
+  id           String              @id @default(uuid())
+  slug         String              @unique
+  title        String
+  subtitle     String?
+  description  String              @db.Text
+  problem      String?             @db.Text
+  solution     String?             @db.Text
+  architecture String?             @db.Text
+  features     String?             @db.Text
+  category     String
+  imageUrl     String
+  bannerUrl    String?
+  githubUrl    String?
+  liveDemoUrl  String?
+  featured     Boolean             @default(false)
+  order        Int                 @default(0)
+  published    Boolean             @default(true)
+  technologies ProjectTechnology[]
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+}
+
+model ProjectTechnology {
+  id        String  @id @default(uuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name      String
+  category  String?
+  icon      String?
+
+  @@index([projectId])
+}
+
+model SkillCategory {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?  @db.Text
+  order       Int      @default(0)
+  skills      Skill[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Skill {
+  id            String        @id @default(uuid())
+  name          String
+  categoryId    String
+  category      SkillCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  proficiency   String?
+  icon          String?
+  isHighlighted Boolean       @default(false)
+  order         Int           @default(0)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([categoryId])
+}
+
+model Experience {
+  id               String   @id @default(uuid())
+  company          String
+  position         String
+  location         String?
+  type             String   @default("Internship")
+  startDate        String
+  endDate          String?
+  isCurrent        Boolean  @default(false)
+  description      String   @db.Text
+  responsibilities String   @db.Text
+  technologies     String
+  order            Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Education {
+  id             String   @id @default(uuid())
+  institution    String
+  degree         String
+  specialization String
+  score          String?
+  startYear      String
+  endYear        String
+  isCurrent      Boolean  @default(false)
+  achievements   String?  @db.Text
+  order          Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Certification {
+  id              String   @id @default(uuid())
+  title           String
+  issuer          String
+  issueDate       String
+  expiryDate      String?
+  credentialId    String?
+  credentialUrl   String?
+  certificateFile String?
+  description     String?  @db.Text
+  skills          String?
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model ContactMessage {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  subject   String
+  message   String   @db.Text
+  isRead    Boolean  @default(false)
+  isSpam    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SocialLink {
+  id        String   @id @default(uuid())
+  platform  String
+  url       String
+  icon      String?
+  username  String?
+  order     Int      @default(0)
+  isVisible Boolean  @default(true)
+  profileId String?
+  profile   Profile? @relation(fields: [profileId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SiteSettings {
+  id               String   @id @default(uuid())
+  heroHeading      String   @default("Building Intelligent Systems. Engineering Digital Experiences.")
+  heroSubtitle     String   @default("Software Engineer | Backend Developer | Full Stack Developer | AI/ML Enthusiast")
+  siteTitle        String   @default("Bhumi Prasad — Software Engineer & 3D Interactive Portfolio")
+  metaDescription  String   @default("Official portfolio of Bhumi Prasad, Software Engineer specializing in Java, Spring Boot, Next.js, and Machine Learning.")
+  ogImage          String?
+  availabilityText String   @default("Available for Fall 2026 / 2027 Software Engineering Roles & Projects")
+  availableForHire Boolean  @default(true)
+  primaryEmail     String   @default("prasad14bhumi@gmail.com")
+  contactPhone     String?  @default("+91 62908 15479")
+  githubUrl        String   @default("https://github.com/bhumiprasad14")
+  linkedinUrl      String   @default("https://linkedin.com/in/bhumiprasad")
+  resumePdfUrl     String?  @default("/resume.pdf")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
